@@ -1,0 +1,38 @@
+@import '~node_modules/modern-normalize/modern-normalize.css';
+body {
+  color: #212121;
+}
+
+form {
+  padding: 10px;
+  background-color: #958ee4;
+  width: 100%;
+  text-align: center;
+}
+
+input {
+  font-size: 17px;
+  border: 1px solid skyblue;
+  padding: 10px 40px 10px 10px;
+  width: 400px;
+}
+
+input:focus {
+  outline: 1px solid skyblue;
+}
+
+button {
+  /* font-size: 17px; */
+  position: absolute;
+  width: 40px;
+  padding: 10.5px;
+  background: skyblue;
+  color: #fafafa;
+  border: 1px solid skyblue;
+  cursor: pointer;
+  transform: translate(-100%);
+}
+
+button:hover {
+  background: #48b4e0;
+}/*# sourceMappingURL=index.css.map */
