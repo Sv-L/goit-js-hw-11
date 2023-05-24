@@ -3,46 +3,64 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import createImageMarkup from './js/marcup.js';
-import { perPage, fetchImg } from './js/fetch.js';
+import FetchImg from './js/fetch.js';
 import smoothScroll from './js/smoothScroll.js';
+import debounce from 'lodash.debounce';
 
 const galleryEl = document.querySelector('.gallery');
 const searchQueryEl = document.querySelector('input[name="searchQuery"]');
 const searchFormEl = document.querySelector('form');
-const loadMoreButtonEl = document.querySelector('.load-more');
 const gallery = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-
-const messageEndOfSearchResults = `<p class = 'message'>We're sorry, but you've reached the end of search results.</p>`;
-
-let searchNumber;
 let searchQuery;
+let fetch;
 
-searchFormEl.addEventListener('submit', onSubmitSearchButtonEl);
+searchFormEl.addEventListener('submit', event => {
+  event.preventDefault();
+  onSubmitSearchButton();
+});
+window.addEventListener('scroll', debounce(onScroll, 300));
 
-function onSubmitSearchButtonEl(e) {
-  e.preventDefault();
+async function onSubmitSearchButton() {
   clearMarcup();
-  searchNumber = 1;
   searchQuery = searchQueryEl.value;
-  showMessageAndRenderMarcup();
+  fetch = new FetchImg(`${searchQuery}`);
+  await fetch.getResponce();
+  showMessage(fetch);
+  renderMarcup(fetch);
 }
 
-async function onClickLoadMoreButtonEl(e) {
-  searchNumber += 1;
-  const respons = await fetchImg(searchQuery, searchNumber);
-  renderMarcup(respons);
-  smoothScroll(galleryEl);
+async function onScroll() {
+  if (checkPosition()) {
+    await fetch.nextPage();
+    renderMarcup(fetch);
+    smoothScroll(galleryEl);
+  }
 }
 
-async function showMessageAndRenderMarcup() {
-  const respons = await fetchImg(searchQuery, searchNumber);
-  const imgCount = respons.data.totalHits;
+function checkPosition() {
+  const height = document.body.offsetHeight;
+  const screenHeight = window.innerHeight;
+  const scrolled = window.scrollY;
+  const threshold = height - screenHeight / 4;
+  const position = scrolled + screenHeight;
+  return position >= threshold;
+}
+
+function clearMarcup() {
+  const messageEnd = document.querySelector('.message');
+  if (messageEnd) {
+    messageEnd.remove();
+  }
+  galleryEl.innerHTML = '';
+}
+
+function showMessage(f) {
+  const imgCount = f.getCountImg();
   if (imgCount > 0) {
     Notify.success(`Hooray! We found ${imgCount} images.`);
-    renderMarcup(respons);
   } else {
     Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
@@ -50,33 +68,17 @@ async function showMessageAndRenderMarcup() {
   }
 }
 
-async function renderMarcup(res) {
-  const images = res.data.hits;
-  const countImg = res.data.totalHits;
-  const countFetch = Math.ceil(countImg / perPage);
-  console.log('countFetch', countFetch);
-  console.log('searchNumber', searchNumber);
-
-  if (countImg > 40 && countFetch > searchNumber) {
-    loadMoreButtonEl.style.display = 'block';
-    loadMoreButtonEl.addEventListener('click', onClickLoadMoreButtonEl);
-  }
+function renderMarcup(f) {
+  const images = f.getImg();
+  const countFetch = f.getCountRequests();
+  const searchNumber = f.getPege();
 
   if (countFetch === searchNumber) {
-    loadMoreButtonEl.style.display = 'none';
-    loadMoreButtonEl.removeEventListener('click', onClickLoadMoreButtonEl);
+    const messageEndOfSearchResults = `<p class = 'message'>We're sorry, but you've reached the end of search results.</p>`;
     galleryEl.insertAdjacentHTML('afterend', messageEndOfSearchResults);
   }
 
   const galerry = createImageMarkup(images);
   galleryEl.insertAdjacentHTML('beforeend', galerry);
   gallery.refresh();
-}
-
-function clearMarcup() {
-  const messageEndOfSearchResultsEl = document.querySelector('.message');
-  if (messageEndOfSearchResultsEl) {
-    messageEndOfSearchResultsEl.remove();
-  }
-  galleryEl.innerHTML = '';
 }

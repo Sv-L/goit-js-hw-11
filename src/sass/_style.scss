@@ -6,7 +6,7 @@ form {
   position: fixed;
   top: 0;
   padding: 15px;
-  background-color: #958ee4;
+  background-color: slateblue;
   width: 100%;
   text-align: center;
 }
@@ -59,19 +59,7 @@ form > button:hover {
   font-size: 12px;
   padding: 0 10px;
 }
-.load-more {
-  display: none;
-  margin: 15px auto;
-  padding: 10px 20px;
-  border: 1px solid skyblue;
-  border-radius: 5px;
-  background-color: slateblue;
-  color: white;
-  font-weight: bold;
-}
-.load-more:hover {
-  background-color: blue;
-}
+
 .message {
   margin-top: 20px;
   text-align: center;
