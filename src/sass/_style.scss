@@ -16,10 +16,10 @@ input {
   border: 1px solid skyblue;
   padding: 10px 40px 10px 10px;
   width: 400px;
-}
 
-input:focus {
-  outline: 1px solid skyblue;
+  &:focus {
+    outline: 1px solid skyblue;
+  }
 }
 
 form > button {

@@ -18,7 +18,6 @@ input {
   padding: 10px 40px 10px 10px;
   width: 400px;
 }
-
 input:focus {
   outline: 1px solid skyblue;
 }
@@ -63,21 +62,6 @@ form > button:hover {
 .info {
   font-size: 12px;
   padding: 0 10px;
-}
-
-.load-more {
-  display: none;
-  margin: 15px auto;
-  padding: 10px 20px;
-  border: 1px solid slateblue;
-  border-radius: 5px;
-  background-color: slateblue;
-  color: white;
-  font-weight: bold;
-}
-
-.load-more:hover {
-  background-color: blueviolet;
 }
 
 .message {
