@@ -5,7 +5,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import createImageMarkup from './js/marcup.js';
 import FetchImg from './js/fetch.js';
 import smoothScroll from './js/smoothScroll.js';
-import debounce from 'lodash.debounce';
+import throttle from 'lodash.throttle';
 
 const galleryEl = document.querySelector('.gallery');
 const searchQueryEl = document.querySelector('input[name="searchQuery"]');
@@ -21,7 +21,7 @@ searchFormEl.addEventListener('submit', event => {
   event.preventDefault();
   onSubmitSearchButton();
 });
-window.addEventListener('scroll', debounce(onScroll, 300));
+window.addEventListener('scroll', throttle(onScroll, 300));
 
 async function onSubmitSearchButton() {
   clearMarcup();
