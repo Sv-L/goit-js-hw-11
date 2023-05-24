@@ -25,11 +25,13 @@ window.addEventListener('scroll', throttle(onScroll, 300));
 
 async function onSubmitSearchButton() {
   clearMarcup();
-  searchQuery = searchQueryEl.value;
-  fetch = new FetchImg(`${searchQuery}`);
-  await fetch.getResponce();
-  showMessage(fetch);
-  renderMarcup(fetch);
+  searchQuery = searchQueryEl.value.trim();
+  if (searchQuery !== '') {
+    fetch = new FetchImg(`${searchQuery}`);
+    await fetch.getResponce();
+    showMessage(fetch);
+    renderMarcup(fetch);
+  }
 }
 
 async function onScroll() {
