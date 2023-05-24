@@ -28,14 +28,13 @@ function onSubmitSearchButtonEl(e) {
   searchNumber = 1;
   searchQuery = searchQueryEl.value;
   showMessageAndRenderMarcup();
-  searchNumber += 1;
 }
 
 async function onClickLoadMoreButtonEl(e) {
+  searchNumber += 1;
   const respons = await fetchImg(searchQuery, searchNumber);
   renderMarcup(respons);
   smoothScroll(galleryEl);
-  searchNumber += 1;
 }
 
 async function showMessageAndRenderMarcup() {
