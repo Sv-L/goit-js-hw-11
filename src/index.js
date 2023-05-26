@@ -35,7 +35,7 @@ async function onSubmitSearchButton() {
 }
 
 async function onScroll() {
-  if (checkPosition()) {
+  if (checkPosition() && fetch.countImg > galleryEl.childElementCount) {
     await fetch.nextPage();
     renderMarcup(fetch);
     smoothScroll(galleryEl);
